@@ -39,7 +39,7 @@
     "js-string-escape": "^1.0.0",
     "js-yaml": "^3.0.2",
     "jshint-summary": "^0.3.0",
-    "karma": "^0.12.23",
+    "karma": "^1.7.0",
     "karma-chrome-launcher": "^0.1.4",
     "karma-coverage": "^0.4.2",
     "karma-jasmine": "~0.1.5",
