@@ -345,7 +345,7 @@ function tapClickGateKeeper(e) {
 
     // ADDED by LeSondier: calling stopPropagation on audio click breaks Safari
     // audio play/pause controllers
-    if (!(e.target.tagName == 'AUDIO' && ionic.Platform.platform() == 'macintel')) {
+    if (!(e.target.tagName == 'AUDIO' && ionic.Platform.platform() == 'macintel' && ionic.Platform.navigator.vendor.indexOf('Apple') !== -1)) {
         e.stopPropagation();
     }
 
