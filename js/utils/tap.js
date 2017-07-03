@@ -342,7 +342,12 @@ function tapClickGateKeeper(e) {
   if ((ionic.scroll.isScrolling && ionic.tap.containsOrIsTextInput(e.target)) ||
       (!e.isIonicTap && !ionic.tap.requiresNativeClick(e.target))) {
     //console.log('clickPrevent', e.target.tagName);
-    e.stopPropagation();
+
+    // ADDED by LeSondier: calling stopPropagation on audio click breaks Safari
+    // audio play/pause controllers
+    if (!(e.target.tagName == 'AUDIO' && ionic.Platform.platform() == 'macintel')) {
+        e.stopPropagation();
+    }
 
     if (!ionic.tap.isLabelWithTextInput(e.target)) {
       // labels clicks from native should not preventDefault othersize keyboard will not show on input focus
