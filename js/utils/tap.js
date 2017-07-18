@@ -343,9 +343,12 @@ function tapClickGateKeeper(e) {
       (!e.isIonicTap && !ionic.tap.requiresNativeClick(e.target))) {
     //console.log('clickPrevent', e.target.tagName);
 
-    // ADDED by LeSondier: calling stopPropagation on audio click breaks Safari
+    // ADDED by LeSondier: calling stopPropagation on audio click breaks Safari and Firefox
     // audio play/pause controllers
-    if (!(e.target.tagName == 'AUDIO' && ionic.Platform.platform() == 'macintel' && ionic.Platform.navigator.vendor.indexOf('Apple') !== -1)) {
+    if (!(e.target.tagName == 'AUDIO'
+      && ((ionic.Platform.platform() == 'macintel'
+      && ionic.Platform.navigator.vendor.indexOf('Apple') !== -1)
+      || (ionic.Platform.navigator.userAgent.indexOf('Firefox') !== -1)))) {
         e.stopPropagation();
     }
 
