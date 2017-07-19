@@ -352,7 +352,7 @@ function tapClickGateKeeper(e) {
 
     // ADDED by LeSondier: calling preventDefault on audio click breaks Firefox
     // audio play/pause controllers
-    if (!(is_tag_audio && ionic.Platform.navigator.userAgent.indexOf('Firefox') !== -1) || !ionic.tap.isLabelWithTextInput(e.target)) {
+    if (!ionic.tap.isLabelWithTextInput(e.target) && !(is_tag_audio && ionic.Platform.navigator.userAgent.indexOf('Firefox') !== -1)) {
       // labels clicks from native should not preventDefault othersize keyboard will not show on input focus
       e.preventDefault();
     }
