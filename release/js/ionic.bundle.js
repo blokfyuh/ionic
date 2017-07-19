@@ -2965,16 +2965,16 @@ function tapClickGateKeeper(e) {
       (!e.isIonicTap && !ionic.tap.requiresNativeClick(e.target))) {
     //console.log('clickPrevent', e.target.tagName);
 
-    // ADDED by LeSondier: calling stopPropagation on audio click breaks Safari and Firefox
+    // ADDED by LeSondier: calling stopPropagation on audio click breaks Safari
     // audio play/pause controllers
-    if (!(e.target.tagName == 'AUDIO'
-      && ((ionic.Platform.platform() == 'macintel'
-      && ionic.Platform.navigator.vendor.indexOf('Apple') !== -1)
-      || (ionic.Platform.navigator.userAgent.indexOf('Firefox') !== -1)))) {
+    var is_tag_audio = e.target.tagName == 'AUDIO';
+    if (!(is_tag_audio && ionic.Platform.platform() == 'macintel' && ionic.Platform.navigator.vendor.indexOf('Apple') !== -1)) {
         e.stopPropagation();
     }
 
-    if (!ionic.tap.isLabelWithTextInput(e.target)) {
+    // ADDED by LeSondier: calling preventDefault on audio click breaks Firefox
+    // audio play/pause controllers
+    if (!(is_tag_audio && ionic.Platform.navigator.userAgent.indexOf('Firefox') !== -1) || !ionic.tap.isLabelWithTextInput(e.target)) {
       // labels clicks from native should not preventDefault othersize keyboard will not show on input focus
       e.preventDefault();
     }
