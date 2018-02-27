@@ -54675,6 +54675,15 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
     $ionicHistory.goBack(backCount);
   };
 
+  function imgixify(url) {
+    if (url.indexOf('/assets') !== -1) return url;
+    var env = url.split('.')[0];
+    var imgix_domain = '-lesondier.imgix.net/';
+    var path = url.split('/')[url.split('/').length - 1];
+    var params = '?fm=pjpg&w=1200&h=627';
+    return env + imgix_domain + path + params;
+  }
+
   $ionicHistory.$updateDomMetaData = function(data, property) {
     if ((!property || property == 'title') && data.title) {
       $document[0].title = data.title;
@@ -54685,7 +54694,7 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
       $document[0].querySelector("meta[property='og:description']").setAttribute('content', data.description);
     }
     if ((!property || property == 'image') && data.image) {
-      $document[0].querySelector("meta[property='og:image']").setAttribute('content', data.image);
+      $document[0].querySelector("meta[property='og:image']").setAttribute('content', imgixify(data.image));
     }
     if (!property) {
       $document[0].querySelector("meta[property='og:url']").setAttribute('content', $location.absUrl());
