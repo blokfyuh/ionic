@@ -876,6 +876,9 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
     if ((!property || property == 'image') && data.image) {
       $document[0].querySelector("meta[property='og:image']").setAttribute('content', data.image);
     }
+    if (!property) {
+      $document[0].querySelector("meta[property='og:url']").setAttribute('content', $location.absUrl());
+    }
   };
 
   // Set the document title when a new view is shown
