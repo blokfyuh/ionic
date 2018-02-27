@@ -54675,11 +54675,23 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
     $ionicHistory.goBack(backCount);
   };
 
+  $ionicHistory.$updateDomMetaData = function(data, property) {
+    if ((!property || property == 'title') && data.title) {
+      $document[0].title = data.title;
+      $document[0].querySelector("meta[property='og:title']").setAttribute('content', data.title);
+    }
+    if ((!property || property == 'description') && data.description) {
+      $document[0].querySelector("meta[name='description']").setAttribute('content', data.description);
+      $document[0].querySelector("meta[property='og:description']").setAttribute('content', data.description);
+    }
+    if ((!property || property == 'image') && data.image) {
+      $document[0].querySelector("meta[property='og:image']").setAttribute('content', data.image);
+    }
+  };
+
   // Set the document title when a new view is shown
   $rootScope.$on('$ionicView.afterEnter', function(ev, data) {
-    if (data && data.title) {
-      $document[0].title = data.title;
-    }
+    return $ionicHistory.$updateDomMetaData(data);
   });
 
   // Triggered when devices with a hardware back button (Android) is clicked by the user
@@ -61811,14 +61823,19 @@ IonicModule
   '$attrs',
   '$compile',
   '$rootScope',
-function($scope, $element, $attrs, $compile, $rootScope) {
+  '$ionicHistory',
+function($scope, $element, $attrs, $compile, $rootScope, $ionicHistory) {
   var self = this;
   var navElementHtml = {};
   var navViewCtrl;
   var navBarDelegateHandle;
   var hasViewHeaderBar;
   var deregisters = [];
-  var viewTitle;
+  var htmlMetaData = {
+    title: undefined,
+    description: undefined,
+    image: undefined
+  };
 
   var deregIonNavBarInit = $scope.$on('ionNavBar.init', function(ev, delegateHandle) {
     // this view has its own ion-nav-bar, remember the navBarDelegateHandle for this view
@@ -61849,7 +61866,10 @@ function($scope, $element, $attrs, $compile, $rootScope) {
       transData.viewNotified = true;
 
       if (!$rootScope.$$phase) $scope.$digest();
-      viewTitle = isDefined($attrs.viewTitle) ? $attrs.viewTitle : $attrs.title;
+
+      for (var key in htmlMetaData) if (htmlMetaData.hasOwnProperty(key)) {
+        htmlMetaData[key] = $attrs['view' + (key.charAt(0).toUpperCase() + key.slice(1))];
+      }
 
       var navBarItems = {};
       for (var n in navElementHtml) {
@@ -61857,13 +61877,12 @@ function($scope, $element, $attrs, $compile, $rootScope) {
       }
 
       navViewCtrl.beforeEnter(extend(transData, {
-        title: viewTitle,
         showBack: !attrTrue('hideBackButton'),
         navBarItems: navBarItems,
         navBarDelegate: navBarDelegateHandle || null,
         showNavBar: !attrTrue('hideNavBar'),
         hasHeaderBar: !!hasViewHeaderBar
-      }));
+      }, htmlMetaData));
 
       // make sure any existing observers are cleaned up
       deregisterFns();
@@ -61874,10 +61893,14 @@ function($scope, $element, $attrs, $compile, $rootScope) {
   function afterEnter() {
     // only listen for title updates after it has entered
     // but also deregister the observe before it leaves
-    var viewTitleAttr = isDefined($attrs.viewTitle) && 'viewTitle' || isDefined($attrs.title) && 'title';
-    if (viewTitleAttr) {
-      titleUpdate($attrs[viewTitleAttr]);
-      deregisters.push($attrs.$observe(viewTitleAttr, titleUpdate));
+
+    for (var key in htmlMetaData) if (htmlMetaData.hasOwnProperty(key)) {
+      var attributeName = 'view' + (key.charAt(0).toUpperCase() + key.slice(1));
+      deregisters.push($attrs.$observe(attributeName, (function(key) {
+        return function(value) {
+          updateHtmlMetaData(value, key);
+        }
+      })(key)));
     }
 
     if (isDefined($attrs.hideBackButton)) {
@@ -61894,10 +61917,11 @@ function($scope, $element, $attrs, $compile, $rootScope) {
   }
 
 
-  function titleUpdate(newTitle) {
-    if (isDefined(newTitle) && newTitle !== viewTitle) {
-      viewTitle = newTitle;
-      navViewCtrl.title(viewTitle);
+  function updateHtmlMetaData(value, key) {
+    if (isDefined(value) && value !== htmlMetaData[key]) {
+      htmlMetaData[key] = value;
+      $ionicHistory.$updateDomMetaData(htmlMetaData, key);
+      if (key == 'title') navViewCtrl[key](value);
     }
   }
 
