@@ -864,11 +864,23 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
     $ionicHistory.goBack(backCount);
   };
 
+  $ionicHistory.$updateDomMetaData = function(data, property) {
+    if ((!property || property == 'title') && data.title) {
+      $document[0].title = data.title;
+      $document[0].querySelector("meta[property='og:title']").setAttribute('content', data.title);
+    }
+    if ((!property || property == 'description') && data.description) {
+      $document[0].querySelector("meta[name='description']").setAttribute('content', data.description);
+      $document[0].querySelector("meta[property='og:description']").setAttribute('content', data.description);
+    }
+    if ((!property || property == 'image') && data.image) {
+      $document[0].querySelector("meta[property='og:image']").setAttribute('content', data.image);
+    }
+  };
+
   // Set the document title when a new view is shown
   $rootScope.$on('$ionicView.afterEnter', function(ev, data) {
-    if (data && data.title) {
-      $document[0].title = data.title;
-    }
+    return $ionicHistory.$updateDomMetaData(data);
   });
 
   // Triggered when devices with a hardware back button (Android) is clicked by the user
