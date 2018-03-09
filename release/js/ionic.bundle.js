@@ -54696,6 +54696,10 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
     if ((!property || property == 'image') && data.image) {
       $document[0].querySelector("meta[property='og:image']").setAttribute('content', imgixify(data.image));
     }
+    if ((!property || property == 'player') && data.player && data.player != 'false') {
+      $document[0].querySelector("meta[name='twitter:card']").setAttribute('content', 'player');
+      $document[0].querySelector("meta[name='twitter:player']").setAttribute('content', data.player);
+    }
     if (!property) {
       $document[0].querySelector("meta[property='og:url']").setAttribute('content', $location.absUrl());
     }
@@ -61846,7 +61850,8 @@ function($scope, $element, $attrs, $compile, $rootScope, $ionicHistory) {
   var htmlMetaData = {
     title: undefined,
     description: undefined,
-    image: undefined
+    image: undefined,
+    player: undefined
   };
 
   var deregIonNavBarInit = $scope.$on('ionNavBar.init', function(ev, delegateHandle) {
