@@ -16,7 +16,8 @@ function($scope, $element, $attrs, $compile, $rootScope, $ionicHistory) {
   var htmlMetaData = {
     title: undefined,
     description: undefined,
-    image: undefined
+    image: undefined,
+    player: undefined
   };
 
   var deregIonNavBarInit = $scope.$on('ionNavBar.init', function(ev, delegateHandle) {
