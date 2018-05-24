@@ -54700,6 +54700,10 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
       $document[0].querySelector("meta[name='twitter:card']").setAttribute('content', 'player');
       $document[0].querySelector("meta[name='twitter:player']").setAttribute('content', data.player);
     }
+    if ((!property || property == 'rss' || property == 'title') && (data.rss || data.title)) {
+      $document[0].querySelector("link[type='application/rss+xml']").setAttribute('title', data.title);
+      $document[0].querySelector("link[type='application/rss+xml']").setAttribute('href', data.rss);
+    }
     if (!property) {
       $document[0].querySelector("meta[property='og:url']").setAttribute('content', $location.absUrl());
     }
@@ -61851,7 +61855,8 @@ function($scope, $element, $attrs, $compile, $rootScope, $ionicHistory) {
     title: undefined,
     description: undefined,
     image: undefined,
-    player: undefined
+    player: undefined,
+    rss: undefined
   };
 
   var deregIonNavBarInit = $scope.$on('ionNavBar.init', function(ev, delegateHandle) {
