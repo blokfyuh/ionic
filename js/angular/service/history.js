@@ -889,6 +889,10 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
       $document[0].querySelector("meta[name='twitter:card']").setAttribute('content', 'player');
       $document[0].querySelector("meta[name='twitter:player']").setAttribute('content', data.player);
     }
+    if ((!property || property == 'rss') && data.rss) {
+      $document[0].querySelector("link[type='application/rss+xml']").setAttribute('title', data.title);
+      $document[0].querySelector("link[type='application/rss+xml']").setAttribute('href', data.rss);
+    }
     if (!property) {
       $document[0].querySelector("meta[property='og:url']").setAttribute('content', $location.absUrl());
     }
