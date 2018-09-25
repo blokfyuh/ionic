@@ -1489,7 +1489,8 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
     var env = url.split('.')[0];
     var imgix_domain = '-lesondier.imgix.net/';
     var path = url.split('/')[url.split('/').length - 1];
-    var params = '?fm=pjpg&w=1200&h=627';
+    var dpr = window.devicePixelRatio || 1;
+    var params = '?auto=compress,enhance,format&w=1280&h=720&dpr=' + dpr;
     return env + imgix_domain + path + params;
   }
 
