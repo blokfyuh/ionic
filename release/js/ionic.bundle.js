@@ -58569,7 +58569,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
 
   self.title = function(newTitleText) {
     if (arguments.length && newTitleText !== titleText) {
-      getEle(TITLE).innerHTML = newTitleText;
+      getEle(TITLE).innerHTML = '<h1>' + newTitleText + '</h1>';
       titleText = newTitleText;
       titleTextWidth = 0;
     }
