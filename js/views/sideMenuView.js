@@ -23,8 +23,8 @@
       this.isEnabled = isEnabled;
     },
     bringUp: function() {
-      if(this.el.style.zIndex !== '0') {
-        this.el.style.zIndex = '0';
+      if(this.el.style.zIndex !== '2') {
+        this.el.style.zIndex = '2';
       }
     },
     pushDown: function() {
