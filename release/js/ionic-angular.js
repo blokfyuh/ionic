@@ -7896,15 +7896,16 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
 
   self.exposeAside = function(shouldExposeAside) {
     if (!(self.left && self.left.isEnabled) && !(self.right && self.right.isEnabled)) return;
-    self.close();
 
     isAsideExposed = shouldExposeAside;
+    if (!isAsideExposed) self.close();
     if ((self.left && self.left.isEnabled) && (self.right && self.right.isEnabled)) {
       self.content.setMarginLeftAndRight(isAsideExposed ? self.left.width : 0, isAsideExposed ? self.right.width : 0);
     } else if (self.left && self.left.isEnabled) {
       // set the left marget width if it should be exposed
       // otherwise set false so there's no left margin
       self.content.setMarginLeft(isAsideExposed ? self.left.width : 0);
+      if (isAsideExposed) self.left.bringUp();
     } else if (self.right && self.right.isEnabled) {
       self.content.setMarginRight(isAsideExposed ? self.right.width : 0);
     }
