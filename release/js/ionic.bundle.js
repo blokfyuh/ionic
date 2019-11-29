@@ -54706,7 +54706,9 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
       $document[0].querySelector("link[type='application/rss+xml']").setAttribute('href', data.rss);
     }
     if (!property) {
-      $document[0].querySelector("meta[property='og:url']").setAttribute('content', $location.absUrl());
+      var url = $location.absUrl();
+      $document[0].querySelector("link[rel='canonical']").setAttribute('href', url);
+      $document[0].querySelector("meta[property='og:url']").setAttribute('content', url);
     }
   };
 
